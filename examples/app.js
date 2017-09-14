@@ -9,12 +9,12 @@ define(['leaflet', 'leaflet.wms'],
 function(L, wms) {
 
 var overlayMap = createMap('overlay-map', false);
-var tiledMap = createMap('tiled-map', true);
+//var tiledMap = createMap('tiled-map', true);
 
 function createMap(div, tiled) {
     // Map configuration
     var map = L.map(div);
-    map.setView([45, -93.2], 6);
+    map.setView([50.9814, 7.5252], 14);
 
     var basemaps = {
         'Basemap': basemap().addTo(map),
@@ -33,9 +33,21 @@ function createMap(div, tiled) {
         }        
     );
 
+    var source2 = wms.source(
+        'http://ows.terrestris.de/osm-haltestellen/service',
+        {
+            "format": "image/png",
+            "transparent": "true",
+            "attribution": "<a href='http://ows.terrestris.de/'>terrestris</a>",
+            "info_format": "text/html",
+            "tiled": false
+        }        
+    );
     var layers = {
         'Topographic': source.getLayer("TOPO-WMS").addTo(map),
-        'OSM Overlay': source.getLayer("OSM-Overlay-WMS").addTo(map)
+        'OSM Overlay': source.getLayer("OSM-Overlay-WMS").addTo(map),
+        'halte-stellen': source2.getLayer("MS").addTo(map),
+          
     };
 
     // Create layer control
@@ -67,8 +79,8 @@ function blank() {
 // Export maps for console experimentation
 return {
     'maps': {
-        'overlay': overlayMap,
-        'tiled': tiledMap
+        'overlay': overlayMap
+ //       'tiled': tiledMap
     }
 };
 
